@@ -11,16 +11,27 @@ package:
 source:
   url: https://github.com/POV-Ray/${{ name }}/archive/v${{ version }}.tar.gz
   sha256: 7bee83d9296b98b7956eb94210cf30aa5c1bbeada8ef6b93bb52228bbc83abff
+  patches:
+    # libc++ has no std::char_traits<unsigned short>, so the UCS2/UCS4 string
+    # types are built on char16_t/char32_t instead (see build.sh; same fix as
+    # FreeBSD/Homebrew). TARGET_OS_MAC is no longer defined by recent macOS
+    # SDKs, which makes the Fixed typedef clash with MacTypes.h (#479).
+    - if: osx
+      then:
+        - patches/vfe-char16_t.cpp.patch
+        - patches/vfeconf-char16_t.h.patch
+        - patches/truetype-mactypes.patch
 
 build:
-  number: 2
-  skip: not linux
+  number: 3
+  skip: win
 
 requirements:
   build:
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - ${{ compiler('cxx') }}
+    - autoconf
     - automake
     - make
   host:
