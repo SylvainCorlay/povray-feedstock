@@ -1,3 +1,12 @@
+# Fix compilation with libc++ >= 19 (Xcode 16.3+): libc++ has no
+# std::char_traits<unsigned short>, so switch these declarations to
+# char16_t / std::u16string. The matching
+# -DPOVMSUCS2=char16_t -DUCS2=char16_t -DUCS4=char32_t CPPFLAGS are set in
+# build.sh.
+# Origin: FreeBSD ports, graphics/povray37 (patch-vfe_vfeconf.h):
+#   https://github.com/freebsd/freebsd-ports/commit/6133473e4227abbfcf023bea6ab5eeed9c17e55b
+# Also applied by Homebrew (on_sequoia and newer):
+#   https://github.com/Homebrew/homebrew-core/blob/master/Formula/p/povray.rb
 --- a/vfe/vfeconf.h
 +++ b/vfe/vfeconf.h
 @@ -61,12 +61,12 @@ namespace vfe
