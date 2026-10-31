@@ -26,6 +26,10 @@ source:
         - patches/vfe-char16_t.cpp.patch
         - patches/vfeconf-char16_t.h.patch
         - patches/truetype-mactypes.patch
+        # osx-arm64 is cross-compiled from osx-64 on CI (build != host);
+        # upstream's configure fails then: AC_RUN_IFELSE-based checks never
+        # pass when cross-compiling
+        - patches/configure-cross-compile.patch
 
 build:
   number: 3
